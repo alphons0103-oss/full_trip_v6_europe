@@ -1,600 +1,237 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>三星 2nm 危機：60% 良率遮羞布被撕開</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+
 <style>
-:root {
-  --bg-dark: #060d1a;
-  --bg-card: #0d1f35;
-  --bg-card2: #0a1628;
-  --samsung-red: #e53e3e;
-  --samsung-red-soft: #feb2b2;
-  --tsmc-teal: #38b2ac;
-  --tsmc-teal-soft: #b2f5ea;
-  --gold: #f6ad55;
-  --white: #f7fafc;
-  --gray: #a0aec0;
-  --border: rgba(255,255,255,0.08);
-}
-
-.reveal {
-  font-family: 'Microsoft JhengHei', '微軟正黑體', 'Noto Sans TC', 'PingFang TC', sans-serif;
-  background: var(--bg-dark);
-  color: var(--white);
-}
-.reveal .slides { text-align: left; }
-.reveal h1, .reveal h2, .reveal h3, .reveal h4 { text-transform: none; color: var(--white); }
-.reveal .progress { color: var(--tsmc-teal); }
-.reveal .controls { color: var(--tsmc-teal); }
-.reveal section { padding: 0; }
-
-/* ── COVER ── */
-.cover {
-  background: linear-gradient(135deg, #060d1a 0%, #0d1f35 40%, #1a0a0a 100%) !important;
-  display: flex !important; flex-direction: column;
-  justify-content: center; padding: 3em 3.5em !important;
-  position: relative; overflow: hidden;
-}
-.cover::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 80% 50%, rgba(229,62,62,0.12) 0%, transparent 60%),
-              radial-gradient(ellipse at 20% 80%, rgba(56,178,172,0.08) 0%, transparent 50%);
-  pointer-events: none;
-}
-.cover .badge {
-  display: inline-block;
-  background: linear-gradient(90deg, #e53e3e, #c53030);
-  color: #fff; font-size: 0.55em; font-weight: 700;
-  padding: 0.3em 1em; border-radius: 20px;
-  letter-spacing: 0.1em; margin-bottom: 0.8em;
-  text-transform: uppercase;
-}
-.cover h1 {
-  font-size: 1.9em; font-weight: 900; line-height: 1.25;
-  margin: 0 0 0.5em; color: #fff;
-}
-.cover h1 span { color: var(--samsung-red); }
-.cover .sub {
-  font-size: 0.8em; color: #a0aec0; margin-bottom: 1.2em;
-  line-height: 1.6;
-}
-.cover .source {
-  font-size: 0.55em; color: #4a5568;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 0.8em; margin-top: 0.8em;
-}
-.cover .stat-row {
-  display: flex; gap: 1.5em; margin: 1em 0;
-}
-.cover .stat-item {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px; padding: 0.6em 1.2em;
-  text-align: center;
-}
-.cover .stat-item .num { font-size: 1.5em; font-weight: 900; color: var(--samsung-red); }
-.cover .stat-item .label { font-size: 0.5em; color: #a0aec0; margin-top: 0.2em; }
-
-/* ── SECTION DIVIDER ── */
-.sec-div {
-  background: linear-gradient(135deg, #0d1f35 0%, #1a0f2e 100%) !important;
-  display: flex !important; flex-direction: column;
-  justify-content: center; padding: 3em 3.5em !important;
-}
-.sec-div .sec-num {
-  font-size: 5em; font-weight: 900;
-  color: rgba(56,178,172,0.15); line-height: 1;
-}
-.sec-div h2 { font-size: 1.9em; font-weight: 800; margin: 0; }
-.sec-div .sec-line {
-  width: 60px; height: 4px;
-  background: var(--tsmc-teal);
-  border-radius: 2px; margin: 0.6em 0;
-}
-.sec-div .sec-sub { font-size: 0.8em; color: #718096; }
-
-/* ── CONTENT SLIDE ── */
-.slide {
-  background: var(--bg-dark) !important;
-  padding: 1.6em 2.5em !important;
-}
-.slide-title {
-  font-size: 0.5em; font-weight: 700; color: var(--tsmc-teal);
-  letter-spacing: 0.15em; text-transform: uppercase;
-  margin-bottom: 0.4em;
-}
-.slide h3 {
-  font-size: 1.15em; font-weight: 800;
-  margin: 0 0 0.6em;
-  border-left: 4px solid var(--tsmc-teal);
-  padding-left: 0.5em;
-}
-.slide h3.red { border-left-color: var(--samsung-red); }
-.slide p { font-size: 0.65em; color: #e2e8f0; line-height: 1.75; margin: 0.3em 0; }
-.slide ul { font-size: 0.65em; color: #e2e8f0; line-height: 1.75; padding-left: 1.2em; }
-.slide li { margin-bottom: 0.35em; }
-.slide li strong { color: #fff; }
-
-/* ── DATA TABLE ── */
-.data-table { width: 100%; border-collapse: collapse; font-size: 0.62em; margin: 0.5em 0; }
-.data-table th {
-  background: #1a2744; color: #93c5fd;
-  padding: 0.6em 0.8em; text-align: left;
-  font-weight: 700; border-bottom: 2px solid var(--tsmc-teal);
-}
-.data-table td {
-  padding: 0.55em 0.8em;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  color: #e2e8f0;
-}
-.data-table tr:hover td { background: rgba(56,178,172,0.05); }
-.data-table .samsung { color: var(--samsung-red); font-weight: 700; }
-.data-table .tsmc { color: var(--tsmc-teal); font-weight: 700; }
-.data-table .winner { color: #68d391; }
-.data-table .loser { color: #fc8181; }
-
-/* ── STAT HERO ── */
-.stat-hero {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 0.8em; margin: 0.8em 0;
-}
-.stat-box {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px; padding: 1em;
-  text-align: center;
-}
-.stat-box.red { border-color: rgba(229,62,62,0.3); background: rgba(229,62,62,0.06); }
-.stat-box.teal { border-color: rgba(56,178,172,0.3); background: rgba(56,178,172,0.06); }
-.stat-box .big { font-size: 2em; font-weight: 900; line-height: 1; }
-.stat-box .big.red { color: var(--samsung-red); }
-.stat-box .big.teal { color: var(--tsmc-teal); }
-.stat-box .big.gold { color: var(--gold); }
-.stat-box .lbl { font-size: 0.52em; color: #718096; margin-top: 0.4em; }
-
-/* ── TIMELINE ── */
-.timeline { margin-top: 0.5em; }
-.tl-item {
-  display: flex; align-items: flex-start;
-  gap: 0.8em; margin-bottom: 0.65em;
-}
-.tl-dot {
-  width: 40px; height: 40px; min-width: 40px;
-  border-radius: 50%; display: flex;
-  align-items: center; justify-content: center;
-  font-size: 0.55em; font-weight: 900; color: #fff;
-}
-.tl-dot.red { background: var(--samsung-red); }
-.tl-dot.gold { background: var(--gold); color: #000; }
-.tl-dot.teal { background: var(--tsmc-teal); color: #000; }
-.tl-content h4 {
-  font-size: 0.7em; font-weight: 800;
-  color: #fff; margin: 0 0 0.2em;
-}
-.tl-content p { font-size: 0.6em; color: #a0aec0; line-height: 1.5; margin: 0; }
-
-/* ── COMPARE GRID ── */
-.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; margin-top: 0.5em; }
-.cmp-box { border-radius: 12px; padding: 1em 1.2em; }
-.cmp-box.red {
-  background: rgba(229,62,62,0.08);
-  border: 1px solid rgba(229,62,62,0.25);
-}
-.cmp-box.teal {
-  background: rgba(56,178,172,0.08);
-  border: 1px solid rgba(56,178,172,0.25);
-}
-.cmp-box h4 {
-  font-size: 0.72em; font-weight: 800; margin: 0 0 0.5em;
-}
-.cmp-box.red h4 { color: var(--samsung-red); }
-.cmp-box.teal h4 { color: var(--tsmc-teal); }
-.cmp-box p, .cmp-box li {
-  font-size: 0.62em; color: #cbd5e0; line-height: 1.65;
-}
-.cmp-box ul { padding-left: 1em; }
-
-/* ── QUOTE BOX ── */
-.quote-box {
-  background: linear-gradient(135deg, rgba(56,178,172,0.1), rgba(56,178,172,0.05));
-  border-left: 4px solid var(--tsmc-teal);
-  border-radius: 0 12px 12px 0;
-  padding: 0.9em 1.2em; margin: 0.7em 0;
-}
-.quote-box p {
-  font-size: 0.7em; color: var(--tsmc-teal-soft);
-  font-style: italic; line-height: 1.7; margin: 0;
-}
-
-.alert-box {
-  background: rgba(229,62,62,0.08);
-  border: 1px solid rgba(229,62,62,0.25);
-  border-radius: 10px; padding: 0.8em 1em; margin: 0.6em 0;
-}
-.alert-box p { font-size: 0.63em; color: #fed7d7; line-height: 1.6; margin: 0; }
-
-/* ── FULL COMPARE TABLE ── */
-.vs-table { width: 100%; border-collapse: collapse; font-size: 0.58em; margin-top: 0.6em; }
-.vs-table th { padding: 0.6em 0.8em; text-align: center; font-weight: 800; }
-.vs-table th:first-child { text-align: left; color: #718096; background: #0d1f35; }
-.vs-table th.sam { background: rgba(229,62,62,0.15); color: var(--samsung-red); }
-.vs-table th.tmc { background: rgba(56,178,172,0.15); color: var(--tsmc-teal); }
-.vs-table td { padding: 0.5em 0.8em; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; text-align: center; }
-.vs-table td:first-child { text-align: left; color: #a0aec0; background: rgba(255,255,255,0.02); }
-.vs-table td.bad { color: #fc8181; }
-.vs-table td.good { color: #68d391; }
-.vs-table tr:hover td { background: rgba(255,255,255,0.03); }
-
-/* ── KEY POINTS ── */
-.key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7em; margin-top: 0.5em; }
-.key-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 10px; padding: 0.8em 1em;
-}
-.key-card h4 { font-size: 0.68em; font-weight: 800; color: var(--gold); margin: 0 0 0.3em; }
-.key-card p { font-size: 0.6em; color: #a0aec0; line-height: 1.6; margin: 0; }
-
-/* ── THANK YOU ── */
-.thankyou {
-  background: linear-gradient(135deg, #060d1a 0%, #0d1f35 100%) !important;
-  display: flex !important; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center; padding: 2em !important;
-}
-.thankyou h1 { font-size: 3em; font-weight: 900; color: #fff; }
-.thankyou .line {
-  width: 80px; height: 3px;
-  background: linear-gradient(90deg, var(--samsung-red), var(--tsmc-teal));
-  border-radius: 2px; margin: 0.8em auto;
-}
-.thankyou p { font-size: 0.8em; color: #718096; }
-.thankyou a { color: var(--tsmc-teal); text-decoration: none; font-size: 0.65em; }
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600&family=DM+Sans:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;color:var(--color-text-primary);background:transparent}
+.wrap{display:grid;grid-template-columns:268px 1fr;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;min-height:600px}
+.sidebar{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;overflow-y:auto}
+.sidebar-header{padding:1rem 1.25rem 0.75rem;border-bottom:0.5px solid var(--color-border-tertiary);position:sticky;top:0;background:var(--color-background-secondary);z-index:2}
+.sidebar-header h2{font-family:'Crimson Pro',serif;font-size:18px;font-weight:600;line-height:1.3}
+.sidebar-header p{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+.section-label{font-size:9px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-secondary);padding:8px 14px 4px;background:var(--color-background-secondary)}
+.day-tab{padding:0.6rem 1.25rem;cursor:pointer;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;gap:9px;transition:background 0.12s}
+.day-tab:hover{background:var(--color-background-primary)}
+.dnum{font-size:10px;color:var(--color-text-secondary);min-width:34px;padding-top:2px;line-height:1.3}
+.dtitle{font-size:12.5px;font-weight:500;line-height:1.35}
+.dsub{font-size:10.5px;color:var(--color-text-secondary);margin-top:1px}
+.main{display:flex;flex-direction:column;background:var(--color-background-primary);overflow:hidden}
+.map-box{height:270px;overflow:hidden;flex-shrink:0}
+.map-box svg{width:100%;height:100%}
+.detail{flex:1;padding:1.2rem;overflow-y:auto}
+.dlabel{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:3px}
+.dtitle2{font-family:'Crimson Pro',serif;font-size:20px;font-weight:600;margin-bottom:2px}
+.ddate{font-size:11px;color:var(--color-text-secondary);margin-bottom:10px}
+.tip{border-radius:var(--border-radius-md);padding:7px 10px;font-size:11px;margin-bottom:11px;display:flex;gap:7px;align-items:flex-start;line-height:1.5}
+.tip-warn{background:#FAEEDA;border:0.5px solid #FAC775;color:#BA7517}
+.tip-info{background:#E6F1FB;border:0.5px solid #A8CBF0;color:#185FA5}
+.tip-green{background:#E1F5EE;border:0.5px solid #8ED5BE;color:#0F6E56}
+.stops{display:flex;flex-direction:column;gap:8px}
+.scard{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;border-left:3px solid transparent}
+.stime{font-size:10px;color:var(--color-text-secondary);margin-bottom:1px}
+.sname{font-size:13px;font-weight:500}
+.sdesc{font-size:11px;color:var(--color-text-secondary);margin-top:3px;line-height:1.55}
+.stag{display:inline-block;font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:99px;margin-top:5px}
+.t-drive{background:#E6F1FB;color:#185FA5}
+.t-train{background:#F0E6FB;color:#6B3FA0}
+.t-activity{background:#E1F5EE;color:#0F6E56}
+.t-food{background:#FAEEDA;color:#BA7517}
+.t-scenic{background:#FAECE7;color:#993C1D}
+.t-stay{background:#EEEDFE;color:#534AB7}
+.t-history{background:#FBF0E6;color:#8B4513}
+.t-new{background:#EAF3DE;color:#3B6D11;border:0.5px solid #C0DD97}
+.new-badge{font-size:9px;font-weight:500;padding:1px 6px;border-radius:99px;background:#EAF3DE;color:#3B6D11;border:0.5px solid #C0DD97;margin-left:6px;vertical-align:middle}
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
 </style>
-</head>
-<body>
-<div class="reveal">
-<div class="slides">
 
-<!-- ══ COVER ══ -->
-<section class="cover">
-  <div class="badge">🔥 半導體產業深度分析</div>
-  <h1>60% 良率遮羞布<br>被撕開！<br><span>三星 2nm</span> 一場騙局？</h1>
-  <div class="sub">竟然敗給台積電 3nm｜五年被坑三次｜高通跑路了，誰還信三星？</div>
-  <div class="stat-row">
-    <div class="stat-item">
-      <div class="num">−40%</div>
-      <div class="label">三星 2nm 能效落後</div>
+<div class="wrap">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>奧德親子行程</h2>
+      <p>7/1–7/11 · 2大3小 · 奧地利＋柏林＋慕尼黑</p>
     </div>
-    <div class="stat-item">
-      <div class="num" style="color:var(--tsmc-teal)">&lt;50%</div>
-      <div class="label">Exynos 2600 實際良率</div>
-    </div>
-    <div class="stat-item">
-      <div class="num">3次</div>
-      <div class="label">高通被三星坑害次數</div>
-    </div>
+    <div id="tabs"></div>
   </div>
-  <div class="source">📺 來源：Olivia財富解密 ｜ https://youtu.be/CVzBx33rgU4</div>
-</section>
-
-<!-- ══ SECTION 1 ══ -->
-<section class="sec-div">
-  <div class="sec-num">01</div>
-  <div class="sec-line"></div>
-  <h2>效能與能效翻車</h2>
-  <div class="sec-sub">更先進的節點，反而更慢、更耗電</div>
-</section>
-
-<!-- 跑分對比 -->
-<section class="slide">
-  <div class="slide-title">Performance Benchmark</div>
-  <h3 class="red">三星 2nm 跑分輸給台積電 3nm</h3>
-  <table class="data-table">
-    <tr>
-      <th>指標</th>
-      <th>三星 SF2（2nm）</th>
-      <th>台積電 N3（3nm）</th>
-      <th>差距</th>
-    </tr>
-    <tr>
-      <td>單核跑分</td>
-      <td class="loser">3,271</td>
-      <td class="winner">3,641</td>
-      <td class="winner">+11.3%</td>
-    </tr>
-    <tr>
-      <td>多核跑分</td>
-      <td class="loser">10,745</td>
-      <td class="winner">10,902</td>
-      <td class="winner">+1.5%</td>
-    </tr>
-    <tr>
-      <td>相同任務耗電</td>
-      <td class="loser samsung">高出 +40%</td>
-      <td class="tsmc winner">基準值</td>
-      <td class="loser">−40% 劣勢</td>
-    </tr>
-  </table>
-  <div class="alert-box" style="margin-top:0.7em;">
-    <p>🚨 <strong>核心矛盾：</strong>三星 2nm 是更新一代的製程節點，理論上應該更快、更省電。但實測結果顯示，它在效能與能效兩方面都<strong>落後台積電上一代的 3nm</strong>。更新的製程節點，卻帶來更差的實際表現。</p>
+  <div class="main">
+    <div class="map-box">
+      <svg viewBox="0 0 500 270" xmlns="http://www.w3.org/2000/svg">
+        <rect width="500" height="270" fill="#c8e4d8"/>
+        <path d="M0,65 Q80,45 160,58 Q240,72 320,52 Q400,35 500,50 L500,0 L0,0Z" fill="#b0ccb0" opacity="0.45"/>
+        <path d="M0,270 L500,270 L500,195 Q400,180 300,188 Q200,196 100,183 Q50,176 0,180Z" fill="#a8c8a0" opacity="0.35"/>
+        <ellipse cx="105" cy="215" rx="50" ry="14" fill="#7bbfad" opacity="0.6"/>
+        <ellipse cx="200" cy="182" rx="36" ry="10" fill="#7bbfad" opacity="0.55"/>
+        <ellipse cx="278" cy="193" rx="24" ry="8" fill="#7bbfad" opacity="0.5"/>
+        <ellipse cx="47" cy="245" rx="13" ry="5" fill="#7bbfad" opacity="0.5"/>
+        <path d="M380,55 Q395,50 410,55 Q405,62 390,60Z" fill="#7bbfad" opacity="0.4"/>
+        <line x1="310" y1="110" x2="395" y2="65" stroke="#6B3FA0" stroke-width="1.5" stroke-dasharray="8 4" opacity="0.5"/>
+        <polyline id="route" fill="none" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.5"/>
+        <g id="markers"></g>
+      </svg>
+    </div>
+    <div class="detail" id="detail"></div>
   </div>
-</section>
-
-<!-- ══ SECTION 2 ══ -->
-<section class="sec-div">
-  <div class="sec-num">02</div>
-  <div class="sec-line"></div>
-  <h2>良率的「遮羞布」</h2>
-  <div class="sec-sub">60% 只是峰值，不是穩定產量</div>
-</section>
-
-<!-- 良率解析 -->
-<section class="slide">
-  <div class="slide-title">Yield Rate Analysis</div>
-  <h3 class="red">三星宣稱 60% 良率——真相是？</h3>
-  <div class="stat-hero">
-    <div class="stat-box red">
-      <div class="big red">60%</div>
-      <div class="lbl">三星對外宣稱峰值良率<br>（非穩定產量）</div>
-    </div>
-    <div class="stat-box red">
-      <div class="big red">&lt;50%</div>
-      <div class="lbl">Exynos 2600<br>手機處理器平均良率</div>
-    </div>
-    <div class="stat-box teal">
-      <div class="big teal">80~90%</div>
-      <div class="lbl">台積電同類產品<br>穩定良率區間</div>
-    </div>
-  </div>
-  <div class="cmp">
-    <div class="cmp-box red">
-      <h4>🔴 三星良率的真實情況</h4>
-      <ul>
-        <li>「60%」是<strong>峰值</strong>，非穩定量產水準</li>
-        <li>主要客戶是<strong>要求較低的挖礦晶片公司</strong></li>
-        <li>Exynos 2600 良率在<strong>40%～60% 之間劇烈跳動</strong></li>
-        <li>客戶無法預測出貨量，不敢下大單</li>
-      </ul>
-    </div>
-    <div class="cmp-box teal">
-      <h4>🟢 良率穩定的重要性</h4>
-      <ul>
-        <li>良率不穩 = 出貨計畫無法確定</li>
-        <li>客戶承受庫存風險與延誤壓力</li>
-        <li>穩定 &gt; 峰值：客戶需要<strong>可預測性</strong></li>
-        <li>台積電 80~90% 良率讓客戶安心排產</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ══ SECTION 3 ══ -->
-<section class="sec-div">
-  <div class="sec-num">03</div>
-  <div class="sec-line"></div>
-  <h2>高通與三星：五年信任崩塌</h2>
-  <div class="sec-sub">三度踩雷，高通選擇永遠跑路</div>
-</section>
-
-<!-- 高通時間軸 -->
-<section class="slide">
-  <div class="slide-title">Trust Crisis Timeline</div>
-  <h3 class="red">高通被三星坑害的三個轉折點</h3>
-  <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dot red">2021</div>
-      <div class="tl-content">
-        <h4>Snapdragon 888（5nm）— 「火龍」事件</h4>
-        <p>三星 5nm 製程發熱嚴重，用戶稱之為「火龍」。良率與熱設計問題同時爆發，讓搭載 888 的手機飽受批評，高通品牌形象受損。</p>
-      </div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot red">2022</div>
-      <div class="tl-content">
-        <h4>Snapdragon 8 Gen 1（4nm）— 良率崩潰，緊急換廠</h4>
-        <p>三星 4nm 良率過低、發熱問題再現。高通緊急將 <strong style="color:#fbd38d;">8+ Gen 1 轉交台積電 4nm 代工</strong>，結果效能提升、功耗降低 <strong style="color:#68d391;">30%</strong>。這一對比讓高通徹底看清差距。</p>
-      </div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot gold">2025</div>
-      <div class="tl-content">
-        <h4>三星 2nm 再次承諾 — 高通直接回台積電</h4>
-        <p>面對三星的再次保證，高通選擇直接無視，<strong style="color:#68d391;">重回台積電</strong>。理由簡單：「輸不起，不敢再賭。」五年三度被坑，信任已徹底歸零。</p>
-      </div>
-    </div>
-  </div>
-  <div class="quote-box">
-    <p>「台積電 4nm 讓 8+ Gen 1 的功耗降低 30%，只是換了代工廠，同樣的晶片設計，差距如此之大——這才是客戶最心寒的地方。」</p>
-  </div>
-</section>
-
-<!-- ══ SECTION 4 ══ -->
-<section class="sec-div">
-  <div class="sec-num">04</div>
-  <div class="sec-line"></div>
-  <h2>三星的深層問題</h2>
-  <div class="sec-sub">急功近利的研發策略 × 問責文化殺死創新</div>
-</section>
-
-<!-- 三星問題 -->
-<section class="slide">
-  <div class="slide-title">Root Cause Analysis</div>
-  <h3 class="red">為什麼三星的問題難以根治？</h3>
-  <div class="cmp">
-    <div class="cmp-box red">
-      <h4>🔴 策略問題：急功近利</h4>
-      <ul>
-        <li>良率遇瓶頸時，抽調人手去<strong>研發更先進節點</strong>（如現在全力衝 1nm）</li>
-        <li>現有問題無人徹底優化</li>
-        <li>技術尚未成熟就<strong>強行量產上線</strong></li>
-        <li>用節點數字搶市場話語權，而非用良率贏客戶信賴</li>
-      </ul>
-    </div>
-    <div class="cmp-box red">
-      <h4>🔴 文化問題：問責文化殺死創新</h4>
-      <ul>
-        <li>工程師為<strong>避責</strong>，淡化或扭曲製程缺陷報告</li>
-        <li>管理層在乎「<strong>不出錯</strong>」而非「贏得競爭」</li>
-        <li>問題被掩蓋 → 客戶踩雷 → 信任流失的惡性循環</li>
-        <li>即使內部知道問題，也不敢對上匯報真實情況</li>
-      </ul>
-    </div>
-  </div>
-  <div class="alert-box">
-    <p>⚠️ <strong>根本困境：</strong>當一個公司的文化是「懲罰報告問題的人」，它就永遠無法真正解決問題。三星的技術困境，本質上是<strong>組織文化的困境</strong>。</p>
-  </div>
-</section>
-
-<!-- ══ SECTION 5 ══ -->
-<section class="sec-div">
-  <div class="sec-num">05</div>
-  <div class="sec-line"></div>
-  <h2>台積電的護城河</h2>
-  <div class="sec-sub">最稀缺的不是黑科技，而是「兌現能力」</div>
-</section>
-
-<!-- 台積電護城河 -->
-<section class="slide">
-  <div class="slide-title">TSMC Competitive Moat</div>
-  <h3>台積電為何難以超越？</h3>
-  <div class="cmp">
-    <div class="cmp-box teal">
-      <h4>🟢 穩定兌現的 DNA</h4>
-      <ul>
-        <li>良率穩定維持在 <strong>80%～90%</strong></li>
-        <li>「客戶至上」與「穩定兌現」深植文化</li>
-        <li><strong>不把客戶當實驗品</strong>，技術驗證完善才量產</li>
-        <li>Apple、高通、NVIDIA 長期信賴的根本原因</li>
-      </ul>
-    </div>
-    <div class="cmp-box teal">
-      <h4>🟢 執行力的護城河</h4>
-      <ul>
-        <li>同樣製程節點，<strong>良率比競爭對手高 30%+</strong></li>
-        <li>工程師文化：發現問題 = 解決問題的機會</li>
-        <li>精益求精，不急於跳向下一個節點</li>
-        <li>讓客戶的晶片設計得到最大化實現</li>
-      </ul>
-    </div>
-  </div>
-  <div class="quote-box">
-    <p>「在半導體行業，最稀缺的不是下一個黑科技，而是能將當前技術穩定做到極致的<strong>兌現能力</strong>。台積電的護城河，正是建立在這種極致的執行文化之上。」</p>
-  </div>
-</section>
-
-<!-- 全面比較 -->
-<section class="slide">
-  <div class="slide-title">Head-to-Head Comparison</div>
-  <h3>三星 vs 台積電：全面差距分析</h3>
-  <table class="vs-table">
-    <tr>
-      <th>比較維度</th>
-      <th class="sam">🔴 三星</th>
-      <th class="tmc">🟢 台積電</th>
-    </tr>
-    <tr>
-      <td>量產良率</td>
-      <td class="bad">40～60%（波動大）</td>
-      <td class="good">80～90%（高且穩）</td>
-    </tr>
-    <tr>
-      <td>效能表現</td>
-      <td class="bad">2nm 跑分輸給 TSMC 3nm</td>
-      <td class="good">3nm 跑分領先三星 2nm</td>
-    </tr>
-    <tr>
-      <td>能效表現</td>
-      <td class="bad">同任務耗電多 40%</td>
-      <td class="good">業界能效標竿</td>
-    </tr>
-    <tr>
-      <td>研發策略</td>
-      <td class="bad">急衝下一節點，放棄優化</td>
-      <td class="good">精益求精，良率優先</td>
-    </tr>
-    <tr>
-      <td>企業文化</td>
-      <td class="bad">問責導向，掩蓋問題</td>
-      <td class="good">客戶導向，解決問題</td>
-    </tr>
-    <tr>
-      <td>大客戶信任</td>
-      <td class="bad">高通三度受害後流失</td>
-      <td class="good">Apple、高通、NVIDIA 深度依賴</td>
-    </tr>
-    <tr>
-      <td>市場定位</td>
-      <td class="bad">節點數字話語權</td>
-      <td class="good">實際交付能力壁壘</td>
-    </tr>
-  </table>
-</section>
-
-<!-- 五大結論 -->
-<section class="slide">
-  <div class="slide-title">Key Conclusions</div>
-  <h3>五大核心結論</h3>
-  <div class="key-grid">
-    <div class="key-card">
-      <h4>① 節點數字 ≠ 實際效能</h4>
-      <p>三星 2nm 跑分輸給台積電 3nm，證明製程節點的命名已不能反映真實技術水準。</p>
-    </div>
-    <div class="key-card">
-      <h4>② 良率穩定性比峰值更重要</h4>
-      <p>60% 峰值良率的三星，遠不如 80%+ 穩定良率的台積電，客戶要的是可預測性。</p>
-    </div>
-    <div class="key-card">
-      <h4>③ 信任一旦失去，難以重建</h4>
-      <p>高通五年被坑三次，即使三星改善技術，心理創傷已造成永久性客戶流失。</p>
-    </div>
-    <div class="key-card">
-      <h4>④ 文化問題比技術問題更難解</h4>
-      <p>三星的研發急功近利與問責文化，是技術困境的根本原因，短期內難以根治。</p>
-    </div>
-    <div class="key-card">
-      <h4>⑤ 台積電護城河是「兌現能力」</h4>
-      <p>穩定交付的能力，比任何黑科技都更稀缺，是台積電的真正競爭壁壘。</p>
-    </div>
-    <div class="key-card">
-      <h4>⑥ 三星差距短期難以縮小</h4>
-      <p>技術、文化、客戶信任三重困境疊加，三星追上台積電的路途比預期更漫長。</p>
-    </div>
-  </div>
-</section>
-
-<!-- THANK YOU -->
-<section class="thankyou">
-  <h1>深度分析完畢</h1>
-  <div class="line"></div>
-  <p style="font-size:0.9em;color:#e2e8f0;margin-bottom:0.5em;">60% 良率遮羞布被撕開！三星 2nm 一場騙局？</p>
-  <p>來源：Olivia財富解密</p>
-  <a href="https://youtu.be/CVzBx33rgU4" target="_blank">🔗 https://youtu.be/CVzBx33rgU4</a>
-</section>
-
 </div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+
 <script>
-Reveal.initialize({
-  hash: true,
-  slideNumber: 'c/t',
-  transition: 'slide',
-  transitionSpeed: 'fast',
-  backgroundTransition: 'fade',
-  controls: true,
-  progress: true,
-  center: false,
-  width: 1280,
-  height: 720,
-  margin: 0,
-  minScale: 0.2,
-  maxScale: 2.0
-});
+const phaseColors=["#1D9E75","#185FA5","#8B2500","#D85A30"];
+const phaseNames=["奧地利薩爾茲堡","奧地利湖區","德國柏林","德國慕尼黑"];
+const tagMap={drive:"自駕",train:"高鐵",activity:"活動",food:"餐飲",scenic:"景觀",stay:"住宿",history:"歷史",new:"新增"};
+
+const days=[
+  {phase:0,label:"7/1 週二",title:"抵達薩爾茲堡",sub:"米拉貝爾宮 · 老城 · 薩爾茲堡要塞",
+   tip:{type:"info",text:"今天輕鬆遊，建議住舊城區附近，步行即達所有景點。薩爾茲堡卡（Salzburg Card）可涵蓋要塞門票與纜車費用，若在薩爾茲堡停留超過一天相當划算。"},
+   stops:[
+    {time:"抵達後",name:"薩爾茲堡市區飯店 check-in",desc:"建議住 Altstadt 舊城區附近，步行即達米拉貝爾宮與要塞。",tag:"stay"},
+    {time:"下午 14:00",name:"米拉貝爾宮花園",desc:"《真善美》拍攝地，花園免費入場，孩子可盡情奔跑拍照。約30–45分鐘。",tag:"scenic"},
+    {time:"下午 15:00",name:"老城漫步 · 格特萊德街",desc:"穿越薩爾茲堡老城，路過莫扎特出生地外觀，感受巴洛克風情，順道找間咖啡廳稍作休息。",tag:"scenic"},
+    {time:"下午 15:30",name:"薩爾茲堡要塞（Festung Hohensalzburg）",desc:"搭纜車（FestungsBahn）上山，中歐保存最完整的中世紀大城堡。俯瞰薩爾茲堡老城全景、王子廳金碧輝煌的房間、木偶博物館，約1.5–2小時。7月開放至晚上8點，時間充裕。建議提前網路購票跳過排隊。",tag:"activity",isNew:true},
+    {time:"傍晚 18:00",name:"老城廣場晚餐",desc:"從要塞下山後，在 Alter Markt 或 Residenzplatz 附近選一家餐廳，享用第一頓奧地利晚餐。",tag:"food"}
+  ]},
+  {phase:0,label:"7/2 週三",title:"取車 → 國王湖 → 聖沃夫岡",sub:"Freilassing取車 · 國王湖遊船",
+   tip:{type:"warn",text:"國王湖旺季船票請提前網路預購！8–9點抵達碼頭最佳，避開人潮。"},
+   stops:[
+    {time:"早上",name:"搭火車至 Freilassing 取車",desc:"薩爾茲堡搭火車約15分鐘，德國側租車費用低於奧地利。",tag:"drive"},
+    {time:"上午",name:"國王湖 Königssee 遊船",desc:"搭電動船至聖巴爾多祿茂教堂，聆聽號角山谷迴聲，預留3–4小時。",tag:"activity"},
+    {time:"下午",name:"驅車前往聖沃夫岡入住",desc:"車程約1小時，建議選有湖景陽台的民宿。",tag:"stay"}
+  ]},
+  {phase:1,label:"7/3 週四",title:"沙富山 + 高薩湖",sub:"蒸汽小火車 · Gosausee徒步",
+   tip:{type:"green",text:"上午搭火車、下午徒步，動靜兼具，是全程體力最大的一天。"},
+   stops:[
+    {time:"上午",name:"SchafbergBahn 百年蒸汽小火車",desc:"登沙富山頂俯瞰湖區全景，來回含遊覽約2.5小時，需提前預訂。",tag:"activity"},
+    {time:"下午",name:"Gosausee 環湖徒步",desc:"達克斯坦雪山為背景，環湖步道平緩，約2–3小時。",tag:"activity"},
+    {time:"傍晚",name:"湖邊晚餐後返回聖沃夫岡",desc:"Gosausee 湖畔餐廳享用晚餐。",tag:"food"}
+  ]},
+  {phase:1,label:"7/4 週五",title:"哈爾施塔特 + Dachstein冰洞",sub:"世界遺產 · 冰洞 · 古鹽礦",
+   tip:{type:"warn",text:"10:30前抵達P1停車場！冰洞洞內-2°C，記得帶外套。Cave Ticket：大人€48.70、兒童€26.80，無需預約。"},
+   stops:[
+    {time:"10:30前",name:"抵達 Hallstatt P1 停車場",desc:"從聖沃夫岡出發約40分鐘，早到為上。",tag:"drive"},
+    {time:"上午",name:"哈爾施塔特老鎮漫遊",desc:"世界遺產小鎮，湖景教堂、木棧道，每個轉角都是明信片。",tag:"scenic"},
+    {time:"下午早",name:"Dachstein Rieseneishöhle 冰洞",desc:"開車10分鐘至Obertraun，搭纜車上山後步行15分鐘抵達洞口，導覽約1小時，現場登記即可。",tag:"activity"},
+    {time:"下午",name:"Hallstatt 古鹽礦（可選）",desc:"礦坑木滑梯，9–12歲孩子保證歡呼。視體力決定是否安排。",tag:"activity"},
+    {time:"傍晚",name:"移往薩爾茲堡市區 check-in",desc:"驅車約1小時返回薩爾茲堡，入住市區飯店。",tag:"drive"}
+  ]},
+  {phase:0,label:"7/5 週六",title:"薩爾茲堡 → 慕尼黑 → 柏林",sub:"還車 · 搭ICE高鐵前往柏林",
+   tip:{type:"info",text:"薩爾茲堡還車後搭火車到慕尼黑（約1.5小時），再轉ICE前往柏林（約4小時）。建議中午前抵達慕尼黑轉車。"},
+   stops:[
+    {time:"上午",name:"Hellbrunn 惡作劇噴泉（可選）",desc:"若體力允許，快閃海爾布倫宮，記得帶換洗衣物！",tag:"activity"},
+    {time:"中午",name:"Freilassing 還車",desc:"驅車約25分鐘還車，搭火車返回薩爾茲堡，再轉ICE前往慕尼黑。",tag:"drive"},
+    {time:"下午",name:"慕尼黑 → 柏林 ICE 高鐵",desc:"從慕尼黑中央車站搭ICE，車程約4小時抵達柏林。有WiFi、餐車、兒童專區。提前預訂票價更優惠。",tag:"train"},
+    {time:"傍晚",name:"抵達柏林 check-in",desc:"入住柏林市區飯店，建議選近 Mitte 或 Potsdamer Platz，交通便利。",tag:"stay"}
+  ]},
+  {phase:2,label:"7/6 週日",title:"柏林歷史探索",sub:"布蘭登堡門 · 柏林圍牆 · 國會大廈",
+   tip:{type:"history",text:"🏛️ 布蘭登堡門、圍牆遺址、東側畫廊都免費。國會大廈玻璃穹頂需提前網路預約（免費），旺季建議至少提前2週登記。"},
+   stops:[
+    {time:"上午",name:"布蘭登堡門 Brandenburg Gate",desc:"柏林最標誌性地標，18世紀新古典主義建築，周邊有街頭表演，氣氛熱鬧。",tag:"scenic"},
+    {time:"上午",name:"國會大廈玻璃穹頂（Reichstag）",desc:"爬上玻璃穹頂俯瞰全柏林，免費入場但需提前網路預約。孩子會被螺旋坡道和鏡面錐體吸引。",tag:"scenic"},
+    {time:"下午",name:"柏林圍牆紀念館 + 東側畫廊",desc:"感受德國分裂歷史，東側畫廊是全球最長的戶外藝術牆，色彩繽紛。",tag:"history"},
+    {time:"傍晚",name:"Potsdamer Platz 波茨坦廣場晚餐",desc:"現代化廣場，餐廳選擇豐富，LEGOLAND就在旁邊（明天安排）。",tag:"food"}
+  ]},
+  {phase:2,label:"7/7 週一",title:"柏林親子樂園日",sub:"LEGOLAND · 柏林動物園 · 電視塔",
+   tip:{type:"green",text:"今天是孩子最開心的一天！LEGOLAND建議提前網路購票節省排隊時間。"},
+   stops:[
+    {time:"上午",name:"LEGOLAND Discovery Centre Berlin",desc:"五層樓室內樂園，500萬塊積木，4D電影、龍堡滑梯、NINJAGO主題區，MINILAND積木版柏林地標，約2–3小時。",tag:"activity"},
+    {time:"下午",name:"柏林動物園",desc:"德國最多物種的動物園，德國唯一的大貓熊，園內多個主題遊樂場，孩子保證黏著不走。",tag:"activity"},
+    {time:"傍晚",name:"柏林電視塔（Fernsehturm）",desc:"368公尺高全德最高建築，360度觀景台俯瞰整座柏林，晚霞時分特別美。建議提前購票跳過排隊。",tag:"scenic"}
+  ]},
+  {phase:2,label:"7/8 週二",title:"自然史博物館 + 前往慕尼黑",sub:"恐龍骨架 · 搭ICE南下慕尼黑",
+   tip:{type:"warn",text:"今天下午搭ICE回慕尼黑，建議預訂14:00–16:00之間的班次，約4小時後抵達。"},
+   stops:[
+    {time:"上午",name:"自然史博物館（Museum für Naturkunde）",desc:"世界最大的腕龍骨架標本（13.27公尺高），孩子見到恐龍必定大喊！互動展覽豐富，約2–3小時。",tag:"activity"},
+    {time:"中午",name:"博物館島午餐 + 散步",desc:"UNESCO世界遺產博物館島周邊，在Spree河畔享用最後一頓柏林午餐。",tag:"food"},
+    {time:"下午",name:"柏林 → 慕尼黑 ICE 高鐵",desc:"從柏林中央車站搭ICE南下，約4小時抵達慕尼黑。",tag:"train"},
+    {time:"傍晚",name:"抵達慕尼黑 check-in",desc:"入住慕尼黑市區飯店，建議選靠近 Marienplatz 或中央車站。",tag:"stay"}
+  ]},
+  {phase:3,label:"7/9 週三",title:"慕尼黑市區",sub:"瑪麗廣場 · 英格蘭公園 · 德意志博物館",
+   tip:{type:"info",text:"德意志博物館家庭票€33，18歲以下免費！是慕尼黑親子評分最高的室內景點。"},
+   stops:[
+    {time:"上午",name:"Marienplatz 瑪麗廣場",desc:"11:00觀看市政廳報時鐘木偶表演，再逛老城步行街。",tag:"scenic"},
+    {time:"上午",name:"英格蘭公園",desc:"世界最大城市公園，看河邊衝浪客（Eisbachwelle），讓孩子在草地盡情放電。",tag:"activity"},
+    {time:"下午",name:"德意志博物館",desc:"世界最大科技博物館，互動展區豐富，9–12歲完全吃得到，可輕鬆玩3–4小時。",tag:"activity"},
+    {time:"傍晚",name:"Viktualienmarkt 維特市場",desc:"露天食品市場，德國香腸、椒鹽麵包，感受道地巴伐利亞飲食。",tag:"food"}
+  ]},
+  {phase:3,label:"7/10 週四",title:"新天鵝堡全日",sub:"童話城堡 · 瑪麗橋 · Füssen小鎮",
+   tip:{type:"warn",text:"⚠️ 7月旺季請至少4–6週前在官網預訂時段票！現場票通常中午前售罄。18歲以下免費入場。"},
+   stops:[
+    {time:"早上",name:"驅車前往 Hohenschwangau",desc:"慕尼黑→新天鵝堡約2小時，建議8點前出發搶早場。",tag:"drive"},
+    {time:"上午",name:"新天鵝堡（Neuschwanstein）",desc:"迪士尼睡美人城堡原型！導覽約30分鐘，18歲以下免費。導覽後步行至瑪麗橋拍最美外觀照。",tag:"activity"},
+    {time:"下午",name:"Füssen 小鎮午後",desc:"中世紀小鎮漫步，吃個午茶，輕鬆收尾。",tag:"scenic"},
+    {time:"傍晚",name:"返回慕尼黑",desc:"車程約2小時，17:00前出發避開車流。",tag:"drive"}
+  ]},
+  {phase:3,label:"7/11 週五",title:"慕尼黑機場 ✈ 離境",sub:"13:00飛機 · 10:00前出發",
+   tip:{type:"warn",text:"市區→機場搭S8/S1地鐵約40分鐘，建議10:00前出發，預留充裕報到時間。"},
+   stops:[
+    {time:"早上",name:"飯店早餐 + 退房",desc:"悠閒吃個早餐，整理行李退房。",tag:"stay"},
+    {time:"10:00",name:"搭S-Bahn前往慕尼黑機場",desc:"S8或S1線約40分鐘直達，10點前出發。",tag:"drive"},
+    {time:"13:00",name:"搭機離開慕尼黑 ✈",desc:"帶著奧地利湖區、柏林圍牆、新天鵝堡的滿滿回憶，踏上歸途！",tag:"drive"}
+  ]}
+];
+
+const pts=[
+  {x:100,y:215,name:"薩爾茲堡",phase:0},
+  {x:44,y:247,name:"國王湖",phase:0},
+  {x:107,y:202,name:"薩爾茲堡要塞",phase:0,isNew:true},
+  {x:126,y:183,name:"聖沃夫岡",phase:1},
+  {x:200,y:153,name:"高薩湖",phase:1},
+  {x:278,y:193,name:"哈爾施塔特",phase:1},
+  {x:262,y:173,name:"Dachstein",phase:1},
+  {x:398,y:62,name:"柏林",phase:2},
+  {x:308,y:112,name:"慕尼黑",phase:3},
+  {x:172,y:135,name:"新天鵝堡",phase:3},
+];
+
+let cur=0;
+
+function buildTabs(){
+  let html='';let lp=-1;
+  days.forEach((d,i)=>{
+    if(d.phase!==lp){html+=`<div class="section-label">${phaseNames[d.phase]}</div>`;lp=d.phase;}
+    const col=phaseColors[d.phase];const active=i===cur;
+    html+=`<div class="day-tab${active?' active':''}" onclick="go(${i})" style="border-left:3px solid ${active?col:'transparent'}">
+      <span class="dnum" style="${active?'color:'+col:''}">${d.label}</span>
+      <div><div class="dtitle">${d.title}</div><div class="dsub">${d.sub}</div></div>
+    </div>`;
+  });
+  document.getElementById('tabs').innerHTML=html;
+}
+
+function buildDetail(){
+  const d=days[cur];const col=phaseColors[d.phase];
+  const tc={'warn':'tip-warn','info':'tip-info','green':'tip-green','history':'tip-warn'}[d.tip.type];
+  const ti={'warn':'💡','info':'ℹ️','green':'✅','history':'🏛️'}[d.tip.type];
+  document.getElementById('detail').innerHTML=`
+    <div class="dlabel" style="color:${col}">${phaseNames[d.phase]} · ${d.label}</div>
+    <div class="dtitle2">${d.title}</div>
+    <div class="ddate">${d.sub}</div>
+    <div class="tip ${tc}"><span>${ti}</span><span>${d.tip.text}</span></div>
+    <div class="stops">${d.stops.map(s=>`
+      <div class="scard" style="border-left-color:${col}">
+        <div class="stime">${s.time}</div>
+        <div class="sname">${s.name}${s.isNew?'<span class="new-badge">新增</span>':''}</div>
+        <div class="sdesc">${s.desc}</div>
+        <span class="stag t-${s.isNew?'new':s.tag}">${s.isNew?'新加入':tagMap[s.tag]}</span>
+      </div>`).join('')}
+    </div>`;
+}
+
+function buildMap(){
+  const phase=days[cur].phase;const col=phaseColors[phase];
+  const pp=pts.filter(p=>p.phase===phase);
+  document.getElementById('route').setAttribute('points',pp.map(p=>`${p.x},${p.y}`).join(' '));
+  document.getElementById('route').setAttribute('stroke',col);
+  document.getElementById('markers').innerHTML=pts.map(p=>{
+    const on=p.phase===phase;
+    const c=on?(p.isNew?'#3B6D11':phaseColors[p.phase]):'#9E9C96';
+    const r=on?7:4.5;
+    const lx=p.x>420?p.x-9:(p.x<60?p.x+10:p.x+11);
+    const anchor=p.x>420?'end':'start';
+    return`<g>
+      <circle cx="${p.x}" cy="${p.y}" r="${r+5}" fill="${c}" opacity="${on?0.18:0}" class="${on?'pulse':''}"/>
+      <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${c}" stroke="white" stroke-width="1.5"/>
+      <text x="${lx}" y="${p.y+4}" font-size="9.5" font-family="DM Sans,sans-serif" font-weight="${on?500:400}" fill="${on?c:'#9E9C96'}" text-anchor="${anchor}">${p.name}</text>
+    </g>`;
+  }).join('');
+}
+
+function go(i){cur=i;buildTabs();buildDetail();buildMap();}
+go(0);
 </script>
-</body>
-</html>
